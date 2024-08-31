@@ -14,7 +14,7 @@ class apiEvent
     {
        try{
           
-            $data = $this->db->get_data(['columns'=>'all','table_name'=>'tbl_events']);            
+            $data = $this->db->get_data(['columns'=>'all','table_name'=>'tbl_events','limit'=>1,'offset'=>1]);            
             return ['success' => true, 'data'=>["a"=>1,"b"=>11,"data"=>$data],'status_code'=>200,'message'=>"executed sucessfully"];
        }
        catch(Exception $e)

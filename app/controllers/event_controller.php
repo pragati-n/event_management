@@ -1,5 +1,7 @@
 <?php
 include  ROOT.'/app/models/event.php';
+include  ROOT.'/app/helper.php';
+
 class event_controller
 {
 	protected $model;
@@ -10,11 +12,14 @@ class event_controller
 
     public  function list($params=array())
 	{
-       // include ROOT.'/app/views/admin/login.php';
-        $events_data = $this->model->get_data();
+        
+        //include ROOT.'/app/views/admin/event_list.php';
+        helper::draw_view(['app_type'=>'admin','draw'=>'event_list']);
+
+       /*  $events_data = $this->model->get_data();
        
         echo "<pre>-";
-        print_r( $events_data );
+        print_r( $events_data ); */
         exit;
         
     }
