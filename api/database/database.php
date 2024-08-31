@@ -21,8 +21,6 @@ class database
        try
        {
 
-       
-
             $this->db_pdo = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->pass);
 
             $this->db_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -60,7 +58,24 @@ class database
             $count = 0;
         }
 
+        $limit = isset($params["limit"]) ? (int)$params["limit"] : 0;
+        $offset = isset($params["offset"]) ? (int)$params["offset"] : 0;
+        $order_column = isset($params["order_column"]) ? $params["order_column"] : "id";
+        $order_by = isset($params["order_by"]) ? $params["order_by"] : "desc";
+
+
         $query = "Select ".$columns." from ".$params['table_name']." where ".$where;
+        $query .= " order by ". $order_column." ".$order_by;
+        if ($limit > 0) 
+        {
+            $query.= " LIMIT :limit";
+            if ($offset > 0) 
+            {
+                $query.= " , :offset";
+            }
+        }
+        
+        echo $query;
         $stmt = $this->db_pdo->prepare($query );
         if(isset($params['bind_params']) && count($params['bind_params']))
         {
@@ -69,14 +84,24 @@ class database
                 $stmt->bindParam($key, $val);
             }
         }
-       /*  echo $query;
-        echo "<br>";
-        echo "==<br>"; */
+
+        if ($limit > 0) 
+        {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            if ($offset > 0) 
+            {
+                $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            }
+        }
+
+        //echo $query;
+        //echo "<br>";
+        //echo "==<br>"; 
         try
         {
             if($stmt->execute())
             {
-                $result = $stmt->fetchAll();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             else
             {
