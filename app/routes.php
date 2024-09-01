@@ -9,21 +9,18 @@ class server
 	private $app_type = "app"; 
 	private $path_arr = [
 							
-                            '/' =>['GET'=>'authentication_controller@login'],	
+                            '/' =>['GET'=>'authentication_controller@dahsboard'],	
+                            '/login' =>['GET'=>'authentication_controller@login'],	
                             '/event_list' =>['GET'=>'event_controller@list'],	
+                            '/fetch_events' =>['GET'=>'event_controller@fetch_events'],	
+                            
 
 
 							//API paths
-							'/api/events' => ['GET'=>'apiEvent_controller@events'],	
+							'/api/events' => ['GET'=>'apiEvent_controller@events'],
+							'/api/events/create' =>['POST'=>'apiEvent_controller@add_event'],		
 
-                            /* '/register' =>['POST'=>'user_controller@register'],	
-							'/login' =>['POST'=>'user_controller@login'],	
-							'/update_user' =>['PUT'=>'user_controller@update_user'],	
-							'/fetch_user' =>['GET'=>'user_controller@get_user'],	
-							'/delete_user' =>['DELETE'=>'user_controller@delete_user'],	
-							'/generate_scratch_card' =>['POST'=>'scratch_card_controller@generate_scratch_card'],	
-							'/add_transaction' =>['POST'=>'scratch_card_controller@add_transaction'],	
-							'/get_transaction' =>['GET'=>'scratch_card_controller@get_transaction'], */	
+                           
 						];
 	
 	public function __construct()
@@ -39,15 +36,33 @@ class server
 	{
 		try
 		{
-	
+			
 			if (strpos($path, '/api') === 0) 
 			{
 				$this->app_type = 'api';
 			}
 			
 			$req_method = $_SERVER['REQUEST_METHOD'];
+			
+			
 			$params = array();
-			$params = json_decode(file_get_contents("php://input") ,true);
+			//$params = json_decode(file_get_contents("php://input") ,true);
+			if ($_SERVER['REQUEST_METHOD'] === 'GET')
+			{
+				$params = $_GET; 
+			}
+			elseif (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) 
+			{
+				
+				$params = json_decode(file_get_contents("php://input"), true);
+				
+			}
+			else {
+				
+				// Fallback to $_POST for form submissions
+				$params = $_POST;
+			}
+
 			/* if($req_method == "GET")
 			{
 				print_r($_GET);
@@ -66,20 +81,24 @@ class server
 				$c_obj = new $path_info_arr[0]($this->db);
 				$response = $c_obj->{$path_info_arr[1]}($params);
 				
+				
+				if($this->app_type =='api')
+				{
+					$response["status_code"] = 200;
 				http_response_code($response["status_code"]);
 				header("Access-Control-Allow-Origin: *");
 				header('Content-Type: text/html; charset=utf-8');
-				if($this->app_type =='api')
-				{
 					header('Content-Type: application/json; charset=utf-8');
+
+					echo  json_encode([
+						'success' => $response["success"] ?? false, 
+						'data' =>  $response["data"] ?? '',
+						'message' =>  $response["message"] ??  '',
+						'error' =>  $response["error"] ?? false,
+			]);
 				}
 				
-				echo  json_encode([
-								'success' => $response["success"] ?? false, 
-								'data' =>  $response["data"],
-								'message' =>  $response["message"],
-								'error' =>  $response["error"] ?? false,
-					]);
+				
 					
 			
 			}

@@ -4,24 +4,34 @@
 class apiEvent
 {
     protected $db;
+    protected $table = 'tbl_events';
     public function __construct($db)
     {
 
         $this->db = $db;
       
     }
-    public function events()
+    public function events($params=array())
     {
-       try{
-          
-            $data = $this->db->get_data(['columns'=>'all','table_name'=>'tbl_events','limit'=>1,'offset'=>1]);            
-            return ['success' => true, 'data'=>["a"=>1,"b"=>11,"data"=>$data],'status_code'=>200,'message'=>"executed sucessfully"];
+       try
+       {
+
+           // $rdata = $this->db->get_data(['columns'=>'all','table_name'=>'tbl_events','limit'=>1,'offset'=>1]); 
+            $rdata['data']= $this->db->get_data($params); 
+            $rdata["success"] = true;           
+            return $rdata;
        }
        catch(Exception $e)
        {
-            http_response_code(500);
-            echo json_encode(['error' => $e->getMessage()]);
-            exit;
+            return ['message' => $e->getMessage()];
+           
        }
+    }
+
+    public function add_event($params=array())
+    {
+        $params['table_name'] = $this->table;
+        return $this->db->insert_data($params);
+       
     }
 }

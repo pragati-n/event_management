@@ -66,6 +66,7 @@ class database
 
         $query = "Select ".$columns." from ".$params['table_name']." where ".$where;
         $query .= " order by ". $order_column." ".$order_by;
+       
         if ($limit > 0) 
         {
             $query.= " LIMIT :limit";
@@ -75,7 +76,7 @@ class database
             }
         }
         
-        echo $query;
+        
         $stmt = $this->db_pdo->prepare($query );
         if(isset($params['bind_params']) && count($params['bind_params']))
         {
@@ -145,7 +146,6 @@ class database
             foreach($val as $key1 => $val1)
             {
                 $stmt->bindValue(":".$key1."_".$count,$val1);
-                echo ":".$key1."_".$count."==".$val1."<br>";
             }
             $count++;
         }
