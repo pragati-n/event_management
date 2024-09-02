@@ -76,13 +76,11 @@ class database
                 $query.= " , :offset";
             }
         }
-       /*  echo  $query; */
-        /* if(isset($params['bind_params']) && count($params['bind_params']))
+
         
-        {
-            echo "=====".$params['bind_params'][":ID"]."=====";
-        } */
         $stmt = $this->db_pdo->prepare($query );
+//echo $query;
+
         if(isset($params['bind_params']) && count($params['bind_params']))
         {
 
@@ -91,7 +89,7 @@ class database
             {
                 
                 $stmt->bindValue($key, $val);
-               /*  echo "herrrrreeeee".$key."===".$val; */
+                /* echo "herrrrreeeee".$key."===".$val;  */
             }
         }
 
@@ -221,7 +219,7 @@ class database
             echo ':c_'.$key."==".$val;
             echo "<br>"; */
         }
-      // echo $query ;
+     //echo $query ;
         try{
             if($stmt->execute())
             {
@@ -254,13 +252,13 @@ class database
         $where = implode(" and ", $columns);
       // echo "columns = ".$where;
         $query = " DELETE from ".$params['table_name']." where ".$where;
-       // echo "<br>".$query;
+echo "<br>".$query;
         $stmt = $this->db_pdo->prepare($query);
 
         foreach($params['where'] as $key => $val)
         {
             $stmt->bindValue(':'.$key,$val);
-            echo "<br>";
+            echo "<br> where === ";
             echo ':'.$key."===".$val."<br>";
         }
 

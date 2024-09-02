@@ -23,7 +23,11 @@ class server
 							'/api/events' => ['GET'=>'apiEvent_controller@events'],
 							'/api/events/create' =>['POST'=>'apiEvent_controller@add_event'],		
 							'/api/events/update' =>['PUT'=>'apiEvent_controller@update_event'],		
-							'/api/events/delete' =>['DELETE'=>'apiEvent_controller@delete_event'],		
+							'/api/events/delete' =>['DELETE'=>'apiEvent_controller@delete_event'],	
+							
+							'/api/user' => ['GET'=>'user_controller@get_user'],
+							'/api/user/update' => ['PUT'=>'user_controller@update_user'],
+							'/api/user/delete' => ['DELETE'=>'user_controller@delete_user'],
 									
 
                            
@@ -100,7 +104,7 @@ class server
 				//echo "in2 ";
 				$c_obj = new $path_info_arr[0]($this->db);
 				$response = $c_obj->{$path_info_arr[1]}($params);
-				echo "response =1233345 ";print_r($response);
+				
 				
 				if($this->app_type =='api')
 				{

@@ -3,15 +3,18 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include API_ROOT.'models/register.php';  
+include API_ROOT.'controllers/user_controller.php';  
 
 class register_controller
 {
     protected $model;
+    protected $db;
 
     public function __construct($db=array())
     {
 
         $this->model = new register($db);
+        $this->db = $db;
         
     }
 
@@ -39,6 +42,14 @@ class register_controller
         }
         else
 		{
+           $u_obj = new user_controller($this->db);
+           $id =  $u_obj->get_user_by_email($params["email"]);
+           if($id > 0 )
+           {
+                $response['success'] = false;               
+                $response['message'] = "User exists with same Email "; 
+                return $response;
+           }
             $s_data = array(
                     'columns' => array(
                         array(
