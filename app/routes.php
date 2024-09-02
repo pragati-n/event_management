@@ -68,11 +68,13 @@ class server
 			$params = array();
 			
 			//$params = json_decode(file_get_contents("php://input") ,true);
-			if ($_SERVER['REQUEST_METHOD'] === 'GET')
+			/* if ($_SERVER['REQUEST_METHOD'] === 'GET')
 			{
+				echo "inside";
 				$params = $_GET; 
 			}
-			elseif (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) 
+			else */
+			if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) 
 			{
 				$params = json_decode(file_get_contents("php://input"), true);
 				
@@ -98,7 +100,7 @@ class server
 				//echo "in2 ";
 				$c_obj = new $path_info_arr[0]($this->db);
 				$response = $c_obj->{$path_info_arr[1]}($params);
-				
+				echo "response =1233345 ";print_r($response);
 				
 				if($this->app_type =='api')
 				{

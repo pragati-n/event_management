@@ -13,19 +13,11 @@ class apiEvent
     }
     public function events($params=array())
     {
-       try
-       {
-
-           // $rdata = $this->db->get_data(['columns'=>'all','table_name'=>'tbl_events','limit'=>1,'offset'=>1]); 
-            $rdata['data']= $this->db->get_data($params); 
-            $rdata["success"] = true;           
-            return $rdata;
-       }
-       catch(Exception $e)
-       {
-            return ['message' => $e->getMessage()];
-           
-       }
+      
+        $params['table_name'] = $this->table;
+        $rdata['data'] = $this->db->get_data($params); 
+        return $rdata;
+       
     }
 
     public function add_event($params=array())

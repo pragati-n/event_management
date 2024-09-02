@@ -37,9 +37,10 @@ class database
 
     public function get_data($params = array() )
     {
-       
+      /* echo "from db";
+      print_r($params); */
         $bindParam = array();
-        if($params["columns"] == "all")
+        if($params["columns"] == "all" || !isset($params["columns"]) || $params["columns"] =='')
         {
             $columns = " * ";              
         }
@@ -57,7 +58,7 @@ class database
             $where = $params["where"];
             $count = 0;
         }
-
+/* echo "where".$where; */
         $limit = isset($params["limit"]) ? (int)$params["limit"] : 0;
         $offset = isset($params["offset"]) ? (int)$params["offset"] : 0;
         $order_column = isset($params["order_column"]) ? $params["order_column"] : "id";
@@ -75,18 +76,28 @@ class database
                 $query.= " , :offset";
             }
         }
+       /*  echo  $query; */
+        /* if(isset($params['bind_params']) && count($params['bind_params']))
         
+        {
+            echo "=====".$params['bind_params'][":ID"]."=====";
+        } */
         $stmt = $this->db_pdo->prepare($query );
         if(isset($params['bind_params']) && count($params['bind_params']))
         {
+
+           
             foreach($params['bind_params'] as $key => $val)
             {
-                $stmt->bindParam($key, $val);
+                
+                $stmt->bindValue($key, $val);
+               /*  echo "herrrrreeeee".$key."===".$val; */
             }
         }
 
         if ($limit > 0) 
         {
+            echo "in====";
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             if ($offset > 0) 
             {
@@ -101,7 +112,7 @@ class database
         {
             if($stmt->execute())
             {
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+               $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             else
             {

@@ -17,24 +17,56 @@ class apiEvent_controller
 
     public function events($params=array())
     {
-        /* echo "<pre>";
-        print_r($params); */
-        $data = $this->model->events($params);
-        if($data["success"] == true)
+       
+        
+         /* print_r($params);  */
+        $g_data["order_column"] = "event_date";
+        $g_data["order_by"] = "desc";
+        $g_data["limit"] = (int)$params["limit"] ?? 0;
+        $g_data["offset"] =  (int)$params["offset"] ?? 0;
+        
+        $where_cond = '';
+        $bindparams ='';
+        if($params['id'])
         {
+            $where_cond = " id=:ID ";
+            $g_data["bind_params"][":ID"] = $params["id"];
+        
+        }
+        if($params['is_admin'] != 1 )//IF user is not administrator
+        {
+            if($where_cond != '')
+            {
+                $where_cond .= " and ";
+            }
+            $where_cond .= "  created_by =:USER_ID";
+            $g_data["bind_params"][':USER_ID'] = $params["user_id"];
+        }
+        /* print_r($g_data["bind_params"]);exit; */
+        $g_data["where"] = ($where_cond ) !='' ? $where_cond :1;
+       
+
+        $data = $this->model->events($g_data);
+       
+        if($data['data'][0]["id"])
+        {
+           
             $rdata['success'] = true;
+           
+            $rdata['status_code'] = 200;
+            $rdata["message"] = "Event fetched";            
             $rdata['data'] = $data['data'];
-            $rdata['status_code'] = 201;
-            //$rdata['message'] = "Event created sucessfully";
+          
         }
         else
         {
+           
             $rdata['success'] = false;
             $rdata['status_code'] = 400;
-            $rdata['message'] =  $data['message'];
+            $rdata["message"] = "No events found for your request";
         }
-       
-        return $data;
+     
+        return $rdata;
     }
 
     public function event_validator($params,$flag)
@@ -43,18 +75,19 @@ class apiEvent_controller
         $current_time = new DateTime();
         
         $event_time = isset($params['event_date']) ? new DateTime($params['event_date']) : $current_time;
-       
-        if($flag=="add" && isset($params['event_name']) && isset($params['event_date']) && isset($params['event_description']) )
+      
+        if($flag=="add" && (!isset($params['event_name']) || !isset($params['event_date']) || !isset($params['even_description']) ))
         {
+           
             $ret_arr["message"] = "please complete the mandatory fields";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
             return $ret_arr;
         }
 
-        if(trim($params['event_name']) == "" && trim($params['event_date'])  == "" && trim($params['event_description']) =="")
+        if(trim($params['event_name']) == "" || trim($params['event_date'])  == "" || trim($params['even_description']) =="")
         {
-            
+           
             $ret_arr["message"] = "please complete the mandatory fields";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
@@ -100,12 +133,12 @@ class apiEvent_controller
         $data = array(
             'columns' => array(
                 array(
-                    'event_name'     	=>   $params['event_title'],  
-                    'even_description'	=>   $params['event_description'],  
+                    'event_name'     	=>   $params['event_name'],  
+                    'even_description'	=>   $params['even_description'],  
                     'event_date'		=>   date("Y-m-d H:i:s",strtotime($params['event_date'])),
                     'created_at'		=>   date('Y-m-d H:i:s'),    
                     'updated_at'		=>   date('Y-m-d H:i:s'),    
-                    'created_by'		=>   1,
+                    'created_by'		=>   $params['user_id'],
                     'image_path'		=>   $image_path,
                 ),
             ),
