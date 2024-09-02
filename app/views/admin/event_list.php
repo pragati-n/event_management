@@ -6,7 +6,7 @@
             </div>
 
             <!-- Event List -->
-            <table class="table table-bordered events_table" id="">
+            <table class="table table-bordered events_table" id="events_table">
                 <thead>
                     <tr>
                         <th>Event name</th>

@@ -1,10 +1,10 @@
-    
+window.onload = function() {
+    check_url();
+};
+
 jQuery(document).ready(function(){
     
-   if(window.location.href.indexOf('event_list') >0)
-   {
-        load_events();
-   }
+   
 
 
     jQuery('#events-link').on("click",function(){
@@ -74,32 +74,29 @@ jQuery(document).ready(function(){
         })
     });
 
-    jQuery(document).on("click","#login_btn",function(e){
-        e.preventDefault();
-
-        alert(2233456)
-    });
     
     
-})
+    
+});
 
 function check_url()
 {
     const path = window.location.pathname;
 
-    if (path === "/events-management/index.php/event_list")
+    if (window.location.href.indexOf('event_list') >0)
     {
         load_events();
     }
 }
 
-window.onload = function() {
-    check_url();
-};
 
+function get_token()
+{
+   return  localStorage.getItem('jwt_token');
+}
 function load_events()
 {
-    
+    const token =  get_token();// Retrieve the token
     var actionUrl = '/events-management/index.php/api/events';
     formData ={
         'columns':'all',
@@ -111,17 +108,70 @@ function load_events()
     $.ajax({
         type:"GET",
         url:actionUrl,
+        headers:{
+            "Authorization":`Bearer ${token}`
+        },
         data:formData,
         contentType: 'application/json',
 
         success:function(response)
         {
-           console.log(response); 
+           console.log(response['data']); 
            r1 = response;
             if(response)
             {
-                jQuery(".events_table").append(
-                    "<tbody> <tr>   <td>"+response['data'][0]['event_name']+"</td> <td>"+response['data'][0]['image_path']+"</td></tr></table>");
+                response["data"].forEach(rdata=>{
+                    console.log(rdata.event_date)
+                })
+                $('#events_table').DataTable({
+                    data: response.data,
+                    columns: [                        
+                        { data: 'event_name' },
+                        { data: 'even_description' },
+                        { 
+                            data: 'event_date',
+                            render: function(data, type, row) {
+                                console.log("type")
+                                console.log(type)
+                                console.log("row")
+                                console.log(row)
+                                return formatEventDate(data);
+                            }
+                        },
+                        { 
+                            data: 'event_date',
+                            render: function(data, type, row) {
+                                console.log(row)
+                                return  '<button type="button" class="btn btn-primary" data-attr="'+row.id+'">Edit</button>              <button type="button" class="btn btn-danger" data-attr="'+row.id+'">Delete</button>';
+                            }
+                        },
+
+                        
+                    ],
+                   // order: [[3, 'desc']] 
+            
+                });
+                /* $str = '<tbody>';
+                response["data"].forEach(rdata=>{
+                        console.log(rdata.id)
+                        console.log(rdata.event_name)
+                        console.log(rdata.even_description)
+
+                        $str += '<tr>';
+                        $str += '<td>';
+                        $str += rdata.event_name
+                        $str += '</td>';
+                        $str += '<td>';
+                        $str += rdata.even_description
+                        $str += '</td>';
+                        $str += '<td>';
+                        $str += rdata.event_date
+                        $str += '</td>';
+                        $str += '</tr>';
+                })
+                $str += '<tbody>'; */
+                
+                jQuery(".events_table").append($str);
             }
             else
             {
@@ -138,3 +188,15 @@ function load_events()
 }
 
 
+function formatEventDate(dateString) {
+    const date = new Date(dateString);
+    
+    // Options for date formatting
+    const optionsDate = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+    const formattedDate = date.toLocaleDateString('en-GB', optionsDate); // "DD/MM/YYYY"
+    const formattedTime = date.toLocaleTimeString('en-GB', optionsTime); // "HH:mm AM/PM"
+
+    return `${formattedDate} ${formattedTime}`;
+}

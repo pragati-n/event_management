@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link href="<?=WEB_PATH?>/app/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?=WEB_PATH?>/app/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
     <style>
        
     </style>
