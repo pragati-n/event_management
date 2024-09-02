@@ -1,7 +1,6 @@
     
 jQuery(document).ready(function(){
     
-
    if(window.location.href.indexOf('event_list') >0)
    {
         load_events();
@@ -75,8 +74,28 @@ jQuery(document).ready(function(){
         })
     });
 
+    jQuery(document).on("click","#login_btn",function(e){
+        e.preventDefault();
+
+        alert(2233456)
+    });
+    
     
 })
+
+function check_url()
+{
+    const path = window.location.pathname;
+
+    if (path === "/events-management/index.php/event_list")
+    {
+        load_events();
+    }
+}
+
+window.onload = function() {
+    check_url();
+};
 
 function load_events()
 {
@@ -117,3 +136,5 @@ function load_events()
 
     })
 }
+
+

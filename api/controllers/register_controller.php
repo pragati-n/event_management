@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 
 include API_ROOT.'models/register.php';  
 include API_ROOT.'controllers/user_controller.php';  

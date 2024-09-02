@@ -1,7 +1,8 @@
 <?php
+error_reporting(0);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 define('ROOT' , __DIR__.'/') ;
 define('WEB_PATH' , "http://".$_SERVER['SERVER_NAME'].'/events-management/') ;
@@ -16,7 +17,8 @@ include API_ROOT.'/database/database.php';
 loadEnv(ROOT.'/.env');
 
 
-$path = $_SERVER['PATH_INFO'] ?? '';
+$path = $_SERVER['PATH_INFO'] ?? '/';
+
 $server_obj = new server();
 $server_obj->handle($path);
 

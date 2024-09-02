@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 
 include API_ROOT.'models/login.php';  
 
@@ -36,10 +36,11 @@ class login_controller
           
             if($rdata[0]["id"] && password_verify($params['password'] , $rdata[0]["password"]))
             {
-                $jwt_arr['u_id'] = $rdata[0]["id"];
-                $jwt_arr['role'] = $rdata[0]["role"];
+                $_SESSION['user_id']  =  $jwt_arr['u_id'] = $rdata[0]["id"];
+                $_SESSION['is_admin'] = $jwt_arr['role'] = $rdata[0]["role"];
 
                 
+
                 $jwt = auth::createToken($jwt_arr);
 
                 $s_data = array(

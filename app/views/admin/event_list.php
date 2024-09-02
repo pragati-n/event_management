@@ -6,15 +6,16 @@
             </div>
 
             <!-- Event List -->
-            <table class="table table-striped events_table" id="">
+            <table class="table table-bordered events_table" id="">
                 <thead>
                     <tr>
-                        <th>Event ID</th>
-                        <th>Title</th>
-                        <th>Date</th>
+                        <th>Event name</th>
+                        <th>Event description</th>
+                        <th>Event date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
+                
                 
             </table>
         </div>

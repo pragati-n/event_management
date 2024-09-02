@@ -10,7 +10,8 @@ class server
 	private $path_arr = [
 							
                             '/' =>['GET'=>'authentication_controller@dahsboard'],	
-                            '/login' =>['GET'=>'authentication_controller@login'],	
+                            '/login' =>['GET'=>'authentication_controller@draw_login'],	
+                            //'/login_user' =>['POST'=>'authentication_controller@login_user'],	
                             '/event_list' =>['GET'=>'event_controller@list'],	
                             '/fetch_events' =>['GET'=>'event_controller@fetch_events'],	
                             
@@ -47,6 +48,7 @@ class server
 		try
 		{
 			
+			$path = ($path != '/') ? rtrim($path,'/') : '/';
 			if (strpos($path, '/api') === 0) 
 			{
 				$this->app_type = 'api';
@@ -56,10 +58,8 @@ class server
 				if(!in_array($path, ['/api/login', '/api/register'])) 
 				{
 					$jwt_auth = new	jwt_auth();
-					$j_data = $jwt_auth->jwt_authenticate();
+					$j_data = $jwt_auth->jwt_authenticate();		
 					
-					$_SESSION['is_admin'] = $j_data['is_admin'];
-					$_SESSION['user_id'] = $j_data['user_id'];
 				}
 
 			}
@@ -89,19 +89,35 @@ class server
 				// Fallback to $_POST for form submissions
 				$params = $_POST;
 			}
-
+//echo $path."====".$req_method;
+//print_r($params);
 			$params['is_admin'] =  $j_data['is_admin'] ?? '';
 			$params['user_id'] =  $j_data['user_id'] ?? '';
-			
+
 			$path_info = $this->path_arr[$path][$req_method];
-			
+//echo "info===".$path_info;
+
 			if($path_info)
 			{
+				
+				if($this->app_type =="app" && !$_SESSION['user_id'] && !in_array($path, ['/login', '/register','/login_user']) )
+       			{
+					header("location: http://".$_SERVER['SERVER_NAME']."/events-management/index.php/login");
+					exit;
+				}
+				if($_SESSION['user_id'] && in_array($path, ['/login', '/register','/login_user']))
+				{
+					header("location: http://".$_SERVER['SERVER_NAME']."/events-management/index.php/");
+					exit;
+				}
 				$path_info_arr = explode("@",$path_info);
 				
-
+		//	print_r($path_info_arr);
+	
 				include_once ROOT.$this->app_type.'/controllers/'.$path_info_arr[0].'.php';
 				//echo "in2 ";
+				
+				//exit;
 				$c_obj = new $path_info_arr[0]($this->db);
 				$response = $c_obj->{$path_info_arr[1]}($params);
 				
@@ -119,7 +135,7 @@ class server
 						'data' =>  $response["data"] ?? '',
 						'message' =>  $response["message"] ??  '',
 						//'error' =>  $response["error"] ?? false,
-			]);
+					]);
 				}
 				
 				
