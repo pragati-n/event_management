@@ -76,7 +76,6 @@ class database
             }
         }
         
-        
         $stmt = $this->db_pdo->prepare($query );
         if(isset($params['bind_params']) && count($params['bind_params']))
         {
@@ -170,10 +169,10 @@ class database
 
     public function update_data($params)
     {
-        echo "<pre>";
-        print_r($params);
+       
+       
         $columns = array_keys($params["columns"]);
-        print_r($columns);
+       
         if(is_array($columns))
         {
             $columns = array_map(function($col){
@@ -189,7 +188,7 @@ class database
         if(is_array($whereColumns))
         {
             $whereColumns = array_map(function($col){
-                echo $col." = :c_".$col;
+                //echo $col." = :c_".$col;
                 return $col." = :c_".$col;
             },$whereColumns);
         }
@@ -200,22 +199,22 @@ class database
         foreach($params["columns"] as $key => $val)
         {
             $stmt->bindValue(':'.$key,$val);
-            echo "<br>";
+            /* echo "<br> bind cols";
             echo ':'.$key."==".$val;
-            echo "<br>";
+            echo "<br>"; */
         }
         foreach($params['where'] as $key => $val)
         {
             $stmt->bindValue(':c_'.$key,$val);
-            echo "<br>";
-            echo ':'.$key."==".$val;
-            echo "<br>";
+            /* echo "<br> bindwhere ";
+            echo ':c_'.$key."==".$val;
+            echo "<br>"; */
         }
-       echo $query ;
+      // echo $query ;
         try{
             if($stmt->execute())
             {
-                return $this->db_pdo->lastInsertId();
+                return true;
             }
             else
             {
@@ -242,9 +241,9 @@ class database
             }, $columns);
         }
         $where = implode(" and ", $columns);
-       echo "columns = ".$where;
+      // echo "columns = ".$where;
         $query = " DELETE from ".$params['table_name']." where ".$where;
-        echo "<br>".$query;
+       // echo "<br>".$query;
         $stmt = $this->db_pdo->prepare($query);
 
         foreach($params['where'] as $key => $val)
@@ -257,7 +256,7 @@ class database
         try{
             if($stmt->execute())
             {
-                echo "Row deleted successfully.";
+                return true;
             }
             else
             {
@@ -268,5 +267,49 @@ class database
         {
             echo "Error: " . $e->getMessage();
         }
+    }
+
+
+    public function run_sql($params = array() )
+    {
+       
+        $bindParam = array();
+        
+        $sql = $params["sql"];
+       
+        $query = $sql;
+
+        $stmt = $this->db_pdo->prepare($query );
+        if(isset($params['bind_params']) && count($params['bind_params']))
+        {
+            foreach($params['bind_params'] as $key => $val)
+            {
+                $stmt->bindParam($key, $val);
+                
+            }
+        }
+
+
+       // echo $query;
+        //echo "<br>";
+        //echo "==<br>"; 
+        try
+        {
+            if($stmt->execute())
+            {
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //var_dump( $result);
+            }
+            else
+            {
+                throw new Exception("Query execution failed");
+            }
+        }
+        catch(Exception $e)
+        {
+            echo "Error: " . $e->getMessage();
+        }
+        
+        return  $result;
     }
 }

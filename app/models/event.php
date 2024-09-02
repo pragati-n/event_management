@@ -12,7 +12,7 @@ class event
 	{
        
        $response = helper::make_curl_request(['path'=>'events']);
-       return $response ;
+       return $response ; 
 
 
     }
