@@ -13,9 +13,16 @@ class jwt_auth
     // Middleware for JWT Authentication
     public function jwt_authenticate() 
     {
-        $http_token_arr = explode(" ",$_SERVER["HTTP_AUTHORISATION"]);
-        $jwt = (strtolower($http_token_arr[0]) == 'bearer') ? trim($http_token_arr[1]) : '';
        
+       // $http_token_arr = explode(" ",$_SERVER["HTTP_Authorization"]);
+         $jwt = '';
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) 
+        {
+            $http_token_arr = explode(" ",$headers['Authorization']);
+            $jwt = (strtolower($http_token_arr[0]) == 'bearer') ? trim($http_token_arr[1]) : '';
+        }
+        
         
         if (isset($jwt)) 
         {
