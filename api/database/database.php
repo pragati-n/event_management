@@ -258,8 +258,8 @@ class database
         foreach($params['where'] as $key => $val)
         {
             $stmt->bindValue(':'.$key,$val);
-            echo "<br> where === ";
-            echo ':'.$key."===".$val."<br>";
+            //echo "<br> where === ";
+            //echo ':'.$key."===".$val."<br>";
         }
 
         try{

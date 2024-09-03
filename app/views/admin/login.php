@@ -68,7 +68,7 @@
 
             <input type="submit" id="login_btn" value="Login">
 
-            <div class="error_msg hide_div" style="color: red;padding: 10px 0px;">sdsdsdsd</div>
+            <div class="error_msg hide_div" style="color: red;padding: 10px 0px;"></div>
         </form>
     </div>
 </body>

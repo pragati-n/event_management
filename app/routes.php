@@ -25,6 +25,7 @@ class server
 							'/api/events/create' =>['POST'=>'apiEvent_controller@add_event'],		
 							'/api/events/update' =>['PUT'=>'apiEvent_controller@update_event'],		
 							'/api/events/delete' =>['DELETE'=>'apiEvent_controller@delete_event'],	
+							'/api/events/update_events' =>['POST'=>'apiEvent_controller@update_event'],	
 							
 							'/api/user' => ['GET'=>'user_controller@get_user'],
 							'/api/user/update' => ['PUT'=>'user_controller@update_user'],
@@ -80,6 +81,7 @@ class server
 				echo "inside gettt endd";
 			}
 			else */
+			
 			if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) 
 			{
 				
@@ -93,11 +95,12 @@ class server
 			else 
 			{
 				
+				
 				// Fallback to $_POST for form submissions
 				$params = $_POST;
 			}
 //echo $path."====".$req_method;
-//print_r($params);
+//print_r($params);exit;
 			$params['is_admin'] =  $j_data['is_admin'] ?? '';
 			$params['user_id'] =  $j_data['user_id'] ?? '';
 			
@@ -106,7 +109,7 @@ class server
 
 			if($path_info)
 			{
-				/* $_SESSION['user_id'] =0; */
+//$_SESSION['user_id'] =0; 
 				if($this->app_type =="app" && !$_SESSION['user_id'] && !in_array($path, ['/login', '/register','/login_user']) )
        			{
 					header("location: http://".$_SERVER['SERVER_NAME']."/events-management/index.php/login");

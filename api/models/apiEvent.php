@@ -43,7 +43,6 @@ class apiEvent
 
     public function get_event_owner($event_id)
     {
-        
         $params['table_name'] = $this->table;
 
        

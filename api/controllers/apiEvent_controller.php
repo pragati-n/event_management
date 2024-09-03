@@ -86,7 +86,7 @@ class apiEvent_controller
         if($flag=="add" && (!isset($params['event_name']) || !isset($params['event_date']) || !isset($params['even_description']) ))
         {
            
-            $ret_arr["message"] = "please complete the mandatory fields1";
+            $ret_arr["message"] = "please complete the mandatory fields";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
             return $ret_arr;
@@ -95,7 +95,7 @@ class apiEvent_controller
         if($flag=="add" && (trim($params['event_name']) == "" || trim($params['event_date'])  == "" || trim($params['even_description']) =="") )
         {
            
-            $ret_arr["message"] = "please complete the mandatory fields2";
+            $ret_arr["message"] = "please complete the mandatory fields ";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
             return $ret_arr;
@@ -173,9 +173,11 @@ class apiEvent_controller
 
     public function update_event($params = array())
     {
+       /*  print_r($params);
+        exit; */
         
         $event_owner_id = $this->model->get_event_owner($params["id"]); 
-        
+       // echo $event_owner_id."----".$params['user_id'];exit;
         if($params['is_admin']== 1 ||  $event_owner_id == $params['user_id'])
         {
             $validator_result = $this->event_validator($params,'edit');
@@ -222,11 +224,10 @@ class apiEvent_controller
                         $u_data['columns'][$val] = date("Y-m-d H:i:s",strtotime($params['event_date']));
                     }
                     
-                    if($val == 'image_path' &&   $params['image_path'] !='')
-                    {
-                        $u_data['columns'][$val] = $image_path;  
-                    }
-
+                }
+                if($val == 'image_path' &&   $image_path !='')
+                {
+                    $u_data['columns']['image_path'] = $image_path;  
                 }
                 
             }
