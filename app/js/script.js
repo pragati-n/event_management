@@ -101,8 +101,8 @@ function load_events()
     formData ={
         'columns':'all',
         'table_name':'tbl_events',
-        'limit':1,
-        'offset':1,
+        'limit':0,
+        'offset':5,
     };
     console.log('load_events'); 
     $.ajax({
@@ -131,17 +131,12 @@ function load_events()
                         { 
                             data: 'event_date',
                             render: function(data, type, row) {
-                                console.log("type")
-                                console.log(type)
-                                console.log("row")
-                                console.log(row)
                                 return formatEventDate(data);
                             }
                         },
                         { 
                             data: 'event_date',
                             render: function(data, type, row) {
-                                console.log(row)
                                 return  '<button type="button" class="btn btn-primary" data-attr="'+row.id+'">Edit</button>              <button type="button" class="btn btn-danger" data-attr="'+row.id+'">Delete</button>';
                             }
                         },
@@ -151,27 +146,8 @@ function load_events()
                    // order: [[3, 'desc']] 
             
                 });
-                /* $str = '<tbody>';
-                response["data"].forEach(rdata=>{
-                        console.log(rdata.id)
-                        console.log(rdata.event_name)
-                        console.log(rdata.even_description)
-
-                        $str += '<tr>';
-                        $str += '<td>';
-                        $str += rdata.event_name
-                        $str += '</td>';
-                        $str += '<td>';
-                        $str += rdata.even_description
-                        $str += '</td>';
-                        $str += '<td>';
-                        $str += rdata.event_date
-                        $str += '</td>';
-                        $str += '</tr>';
-                })
-                $str += '<tbody>'; */
+               
                 
-                jQuery(".events_table").append($str);
             }
             else
             {
