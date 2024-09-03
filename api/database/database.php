@@ -59,23 +59,24 @@ class database
             $count = 0;
         }
 /* echo "where".$where; */
-        $limit = isset($params["limit"]) ? (int)$params["limit"] : 0;
-        $offset = isset($params["offset"]) ? (int)$params["offset"] : 0;
+//print_r($params);
+       
         $order_column = isset($params["order_column"]) ? $params["order_column"] : "id";
         $order_by = isset($params["order_by"]) ? $params["order_by"] : "desc";
 
 
         $query = "Select ".$columns." from ".$params['table_name']." where ".$where;
         $query .= " order by ". $order_column." ".$order_by;
-       
-        if ($limit > 0) 
+
+        if(isset($params["offset"]) && $params["offset"] > 0)
         {
-            $query.= " LIMIT :limit";
-            if ($offset > 0) 
+            if($params["limit"]>=0)
             {
-                $query.= " , :offset";
-            }
-        }
+                $offset =  $params["offset"];
+                $limit = $params["limit"];
+                $query.= " LIMIT :limit , :offset ";
+            }            
+        } 
 
         
         $stmt = $this->db_pdo->prepare($query );
@@ -92,16 +93,15 @@ class database
                 /* echo "herrrrreeeee".$key."===".$val;  */
             }
         }
-
-        if ($limit > 0) 
+        
+        if(isset($params["offset"]) && $params["offset"] > 0)
         {
-            echo "in====";
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            if ($offset > 0) 
+            if($params["limit"]>=0)
             {
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            }
-        }
+            }            
+        } 
 
         //echo $query;
         //echo "<br>";
@@ -252,7 +252,7 @@ class database
         $where = implode(" and ", $columns);
       // echo "columns = ".$where;
         $query = " DELETE from ".$params['table_name']." where ".$where;
-echo "<br>".$query;
+//echo "<br>".$query;
         $stmt = $this->db_pdo->prepare($query);
 
         foreach($params['where'] as $key => $val)

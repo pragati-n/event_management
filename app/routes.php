@@ -72,15 +72,22 @@ class server
 			$params = array();
 			
 			//$params = json_decode(file_get_contents("php://input") ,true);
-			/* if ($_SERVER['REQUEST_METHOD'] === 'GET')
+			/*  if ($_SERVER['REQUEST_METHOD'] == 'GET')
 			{
-				echo "inside";
+				echo "inside gettt";
 				$params = $_GET; 
+				print_r($_GET);
+				echo "inside gettt endd";
 			}
 			else */
 			if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) 
 			{
+				
 				$params = json_decode(file_get_contents("php://input"), true);
+				if(empty($params))
+				{
+					$params = $_GET;
+				}
 				
 			}
 			else 
@@ -93,13 +100,13 @@ class server
 //print_r($params);
 			$params['is_admin'] =  $j_data['is_admin'] ?? '';
 			$params['user_id'] =  $j_data['user_id'] ?? '';
-
+			
 			$path_info = $this->path_arr[$path][$req_method];
 //echo "info===".$path_info;
 
 			if($path_info)
 			{
-				
+				/* $_SESSION['user_id'] =0; */
 				if($this->app_type =="app" && !$_SESSION['user_id'] && !in_array($path, ['/login', '/register','/login_user']) )
        			{
 					header("location: http://".$_SERVER['SERVER_NAME']."/events-management/index.php/login");

@@ -18,13 +18,20 @@ class apiEvent_controller
     public function events($params=array())
     {
        
-        
-         /* print_r($params);  */
+       /* echo "params"; 
+        print_r($params);   */
         $g_data["order_column"] = "event_date";
         $g_data["order_by"] = "desc";
-        $g_data["limit"] = (int)$params["limit"] ?? 0;
-        $g_data["offset"] =  (int)$params["offset"] ?? 0;
-        
+        if(isset($params["offset"]) && $params["offset"] > 0)
+        {
+            if($g_data["limit"]>=0)
+            {
+                $g_data["offset"] =  $params["offset"];
+                $g_data["limit"] = (int)$params["limit"];
+            }            
+        } 
+       
+     
         $where_cond = '';
         $bindparams ='';
         if($params['id'])
@@ -79,16 +86,16 @@ class apiEvent_controller
         if($flag=="add" && (!isset($params['event_name']) || !isset($params['event_date']) || !isset($params['even_description']) ))
         {
            
-            $ret_arr["message"] = "please complete the mandatory fields";
+            $ret_arr["message"] = "please complete the mandatory fields1";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
             return $ret_arr;
         }
 
-        if(trim($params['event_name']) == "" || trim($params['event_date'])  == "" || trim($params['even_description']) =="")
+        if($flag=="add" && (trim($params['event_name']) == "" || trim($params['event_date'])  == "" || trim($params['even_description']) =="") )
         {
            
-            $ret_arr["message"] = "please complete the mandatory fields";
+            $ret_arr["message"] = "please complete the mandatory fields2";
             $ret_arr["status_code"] = 400;
             $ret_arr["error"] = 1;
             return $ret_arr;

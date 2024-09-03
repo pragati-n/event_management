@@ -101,10 +101,10 @@ function load_events()
     formData ={
         'columns':'all',
         'table_name':'tbl_events',
-        'limit':0,
-        'offset':5,
+//'limit':0,
+       // 'offset':5,
     };
-    console.log('load_events'); 
+   
     $.ajax({
         type:"GET",
         url:actionUrl,
@@ -113,6 +113,7 @@ function load_events()
         },
         data:formData,
         contentType: 'application/json',
+        
 
         success:function(response)
         {
@@ -143,7 +144,8 @@ function load_events()
 
                         
                     ],
-                   // order: [[3, 'desc']] 
+                    order: [[3, 'desc']],
+                    lengthMenu: [5, 10, 25, 50, 100], 
             
                 });
                
