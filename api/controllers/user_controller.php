@@ -33,13 +33,13 @@ class user_controller
 
         if($params['is_admin'] != 1)
         {
-            $where_cond .= "  id =:ID";
+            $where_cond .= "  user.id =:ID";
             $g_data["bind_params"][':ID'] = $params["user_id"];
         }
     
         elseif($params['is_admin'] == 1 && isset($params['id']))
         {
-            $where_cond .= "  id =:ID";
+            $where_cond .= "  user.id =:ID";
             $g_data["bind_params"][':ID'] = $params['id'];
         }
         $g_data["where"] = ($where_cond ) !='' ? $where_cond :1;

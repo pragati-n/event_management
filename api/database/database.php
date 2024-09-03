@@ -293,13 +293,13 @@ class database
         {
             foreach($params['bind_params'] as $key => $val)
             {
-                $stmt->bindParam($key, $val);
+                $stmt->bindValue($key, $val);
                 
             }
         }
 
 
-       // echo $query;
+        //echo $query;
         //echo "<br>";
         //echo "==<br>"; 
         try

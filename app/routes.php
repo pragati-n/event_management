@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+error_reporting(1);
 class server
 {
 	
@@ -10,11 +11,12 @@ class server
 	private $path_arr = [
 							
                             '/' =>['GET'=>'authentication_controller@dahsboard'],	
+                            '/register' =>['GET'=>'authentication_controller@register'],	
                             '/login' =>['GET'=>'authentication_controller@draw_login'],	
-                            '/logout' =>['POST'=>'authentication_controller@logout'],	
-                            //'/login_user' =>['POST'=>'authentication_controller@login_user'],	
+                            '/logout' =>['POST'=>'authentication_controller@logout'],
                             '/event_list' =>['GET'=>'event_controller@list'],	
-                            '/fetch_events' =>['GET'=>'event_controller@fetch_events'],	
+                           
+                            '/user_list' =>['GET'=>'user_controller@user_list'],	
                             
 
 

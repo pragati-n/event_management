@@ -14,8 +14,14 @@ class user
     
     public function get_user($params = array())
     {
+       //print_r($params);exit;
         $params['table_name'] = $this->table;
-        $rdata['data'] = $this->db->get_data($params); 
+        $sql = "
+                SELECT user.id,name,email,status,if(role_id =1,'Admin','Author') as role FROM tbl_user   user  inner join tbl_user_role role on(user.id = role.user_id)";
+        $sql .=" where ".$params['where']." ";
+        $params["sql"] = $sql;
+       // $rdata['data'] = $this->db->get_data($params); 
+        $rdata['data'] = $this->db->run_sql($params); 
         return $rdata;
     }
 

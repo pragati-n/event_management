@@ -2,7 +2,7 @@
         <div id="events-section" >
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>Events List</h3>
-                <button class="btn btn-primary" id="add-event-btn">Add Event</button>
+                <button class="btn btn-primary" id="add-event-btn">Add event</button>
             </div>
 
             <!-- Event List -->

@@ -42,6 +42,27 @@ jQuery(document).ready(function(){
         jQuery('#add-event-form').addClass('d-none');
     });
 
+
+    jQuery('#user-link').on("click",function(){
+        jQuery('#user-section').removeClass('d-none');
+        jQuery('#add-user-form').addClass('d-none');
+    })
+
+    jQuery('#add-user-btn').on("click",function(){
+        alert(1)
+        jQuery('#add-user-form').removeClass('d-none');
+        jQuery('#user-section').addClass('d-none');
+        jQuery("#form_save_user")[0].reset();
+        jQuery("#form_save_user").find(".error_msg").hide();
+        jQuery('#save_user').text("Save user") ; 
+        jQuery('#save_user').removeAttr('user_id');
+    })
+
+    jQuery('#cancel-btn').on("click",function(){
+        jQuery('#user-section').removeClass('d-none');
+        jQuery('#add-user-form').addClass('d-none');
+    });
+
     jQuery(document).on("click","#save_event",function(e){
         e.preventDefault();
         jQuery(".error_msg").hide();
@@ -100,6 +121,61 @@ jQuery(document).ready(function(){
 
     
     
+
+    /* jQuery(document).on("click","#save_user",function(e){
+        e.preventDefault();
+        jQuery(".error_msg").hide();
+        var form = jQuery('#form_save_event')[0];
+        var actionUrl = '/events-management/index.php/api/events/create';
+
+        var form = jQuery('#form_save_event')[0] // Get the form element
+        var formData = new FormData(form) // Create a FormData 
+        formData.append("status",1);
+        formData.append("status",1);
+        formData.append("updated_at",getCurrentDateTime());
+       const token = get_token();
+        $.ajax({
+            type:"POST",
+            url:actionUrl,
+            headers:{
+                "Authorization":`Bearer ${token}`
+            },
+            data:formData,
+            contentType: false, // Important: Don't process the data
+            processData: false, // Important: Don't convert to query string
+
+            success:function(data)
+            {
+                if(data.success == true)
+                {
+                    jQuery(".error_msg").removeClass("alert-danger").addClass("alert-primary").show().html(data['message']);
+                    setTimeout(() => {
+                                jQuery('#cancel-btn').trigger("click");
+
+                                load_events();
+                      }, "1000");
+                   
+                    
+                }
+                else
+                {
+                    jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+                }
+                
+            },
+            error: function(xhr, status, error) {
+               
+                jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+            },
+
+
+        })
+    }); */
+
+    
+    
+    
+
     
 });
 
@@ -110,8 +186,10 @@ function check_url()
     if (window.location.href.indexOf('event_list') >0)
     {
         load_events();
-
-       
+    }
+    else if(window.location.href.indexOf('user_list') >0)
+    {
+             load_users();
     }
 }
 
@@ -126,7 +204,6 @@ function load_events()
     var actionUrl = '/events-management/index.php/api/events';
     formData ={
         'columns':'all',
-        'table_name':'tbl_events',
 //'limit':0,
        // 'offset':5,
     };
@@ -211,6 +288,69 @@ function load_events()
    
 }
 
+function load_users()
+{
+    const token =  get_token();// Retrieve the token
+    var actionUrl = '/events-management/index.php/api/user';
+    formData ={
+        //'columns':'all',
+    };
+   
+    $.ajax({
+        type:"GET",
+        url:actionUrl,
+        headers:{
+            "Authorization":`Bearer ${token}`
+        },
+        data:formData,
+        contentType: 'application/json',
+        success:function(response)
+        {
+           console.log(response['data']); 
+            if(response)
+            {
+               
+                if ($.fn.DataTable.isDataTable('#users_table')) {
+                    $('#users_table').DataTable().clear().destroy();
+                }
+                $('#users_table').DataTable({
+                    data: response.data,
+                    columns: [                        
+                        { data: 'name' },
+                        { data: 'email' },
+                        { data: 'role' },
+                        { 
+                            data: 'id',
+                            render: function(data, type, row) {
+                                return  '<button type="button" class="btn btn-primary user_edit_btn" data-id="'+row.id+'" > Edit</button>              <button type="button" class="btn btn-danger user_delete_btn " data-id="'+row.id+'" data-bs-toggle="modal" data-bs-target="#deleteModalUser" >Delete</button> ';
+                            }
+                        },
+
+                        
+                    ],
+                    order: [[1, 'desc']],
+                    lengthMenu: [5, 10, 25, 50, 100], 
+            
+                });
+               
+                
+            }
+            else
+            {
+               
+            }
+            
+        },
+        error:function(data){
+            //jQuery("#error_div").removeClass("alert-success").addClass("alert-danger").html(data.message);
+        }
+
+
+    })
+
+
+   
+}
 
 function formatEventDate(dateString) {
     const date = new Date(dateString);
@@ -289,7 +429,6 @@ jQuery(document).on("click",".event_edit_btn",function(){
     var actionUrl = '/events-management/index.php/api/events';
     formData ={
         'columns':'all',
-        'table_name':'tbl_events',
         "id":event_id,
     }
         
@@ -317,6 +456,133 @@ jQuery(document).on("click",".event_edit_btn",function(){
     
 })
 
+
+jQuery(document).on("click","#save_user",function(e){
+ 
+        e.preventDefault();
+        jQuery(".error_msg").hide();
+        var form = jQuery('#form_save_user')[0];
+        var formData = new FormData(form) // Create a FormData 
+        var user_id = jQuery(this).attr("user_id");
+       
+        var actionUrl = '/events-management/index.php/api/user/update';     
+        const token = get_token();
+        var name = jQuery(form).find("#user_name").val();
+        var email = jQuery(form).find("#user_email").val();
+        $.ajax({
+            type:"PUT",
+            url:actionUrl,
+            headers:{
+                "Authorization":`Bearer ${token}`
+            },
+            data:JSON.stringify({ id: user_id ,name:name,email:email }),
+            contentType: 'application/json',
+           
+
+            success:function(data)
+            {
+                if(data.success == true)
+                {
+                    jQuery(".error_msg").removeClass("alert-danger").addClass("alert-primary").show().html(data['message']);
+                   setTimeout(() => {
+                                jQuery('#cancel-btn').trigger("click");
+                                load_users();
+                      }, "1000");
+                    
+                    
+                }
+                else
+                {
+                    jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+                }
+                
+            },
+            error: function(xhr, status, error) {
+               
+                jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+            },
+
+
+        })
+   
+});
+
+jQuery(document).on("click",".user_delete_btn",function(){
+    var user_id = $(this).attr('data-id');
+
+    
+    $('#deleteModalUser').modal('show');
+    $("#deleteModalUser").find(".error_msg").hide()
+    $('#deleteModalUser').find("#confirmDeleteUSerBtn").attr('user_id', user_id);
+
+});
+
+jQuery(document).on("click","#confirmDeleteUSerBtn",function(){
+    console.log("=====deleteeeeuser")
+    console.log($(this).parents("#deleteModal").find(".error_msg"))
+      
+      const token =  get_token();// Retrieve the token
+      var user_id = $(this).attr('user_id');
+      var actionUrl = '/events-management/index.php/api/user/delete';
+  
+      $.ajax({
+          url: actionUrl,
+          contentType: 'application/json',
+          headers:{
+              "Authorization":`Bearer ${token}`
+          },
+          type: 'DELETE',
+          data: JSON.stringify({ id: user_id }),
+          success: function(response) 
+          {
+              $('#deleteModalUser').modal('hide');
+              load_users()
+          },
+          error: function(xhr, status, error) {
+              $("#deleteModalUser").find(".error_msg").show()
+              jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+          }
+      });
+  });
+
+jQuery(document).on("click",".user_edit_btn",function(){
+   
+    jQuery('#add-user-form').removeClass('d-none');
+    jQuery('#user-section').addClass('d-none');
+    jQuery("#form_save_user")[0].reset();
+    jQuery("#form_save_user").find(".error_msg").hide();
+
+    var user_id = $(this).attr('data-id');
+    const token =  get_token();// Retrieve the token
+    var actionUrl = '/events-management/index.php/api/user';
+    formData ={
+        "id":user_id,
+    }
+        
+    $.ajax({
+        type:"GET",
+        url:actionUrl,
+        headers:{
+            "Authorization":`Bearer ${token}`
+        },
+        data:formData,
+        contentType: 'application/json',
+        success:function(response)
+        {
+            jQuery('#user_name').val(response['data'][0]['name']) ;  
+            jQuery('#user_email').val(response['data'][0]['email'])   ;
+            jQuery('#user_role').text(response['data'][0]['role']) ; 
+            jQuery('#save_user').attr('user_id',user_id) ; 
+             
+        },
+        error:function(xhr, status, error){
+            jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+        }
+    }) 
+
+    
+})
+
 jQuery(document).on("click","#logout_link",function(e){
    e.preventDefault();
     logoutUser();
@@ -333,4 +599,16 @@ function logoutUser()
             window.location.href = '/events-management/index.php/login';
         }
     });
+}
+
+function getCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
