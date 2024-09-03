@@ -11,6 +11,7 @@ class server
 							
                             '/' =>['GET'=>'authentication_controller@dahsboard'],	
                             '/login' =>['GET'=>'authentication_controller@draw_login'],	
+                            '/logout' =>['POST'=>'authentication_controller@logout'],	
                             //'/login_user' =>['POST'=>'authentication_controller@login_user'],	
                             '/event_list' =>['GET'=>'event_controller@list'],	
                             '/fetch_events' =>['GET'=>'event_controller@fetch_events'],	

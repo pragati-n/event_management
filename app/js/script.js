@@ -1,6 +1,21 @@
 window.onload = function() {
     check_url();
 
+    const jwtToken = localStorage.getItem('jwt_token');
+    if (jwtToken) {
+        const payload = JSON.parse(atob(jwtToken.split('.')[1]));
+        const expTime = payload.exp * 1000; 
+        const currentTime = new Date().getTime();
+        const timeoutDuration = expTime - currentTime;
+
+        if (timeoutDuration > 0) {
+            setTimeout(() => {
+                logoutUser();
+            }, timeoutDuration);
+        } else {
+            logoutUser(); // If the token has already expired
+        }
+    }
 
 };
 
@@ -301,3 +316,21 @@ jQuery(document).on("click",".event_edit_btn",function(){
 
     
 })
+
+jQuery(document).on("click","#logout_link",function(e){
+   e.preventDefault();
+    logoutUser();
+});
+
+function logoutUser() 
+{
+    $.ajax({
+        url: '/events-management/index.php/logout',
+        type: 'POST',
+        success: function () {
+            // Clear local storage and redirect to login page
+            localStorage.removeItem('jwt_token');
+            window.location.href = '/events-management/index.php/login';
+        }
+    });
+}

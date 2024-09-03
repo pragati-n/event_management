@@ -24,6 +24,14 @@ class authentication_controller
      
     }
 
+    public function logout($params=array())
+	{
+        session_start();
+        session_unset(); 
+        session_destroy();
+        return['success' => true, 'message' => 'User logged out successfully'];
+    }
+
     public  function dahsboard($params=array())
 	{
         if($_SESSION['user_id'])
