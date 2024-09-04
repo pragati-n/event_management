@@ -2,26 +2,34 @@
 Fully functional Advanced Event Management System.
 Project is done in core php in MVC framework
 
+Admin: http://localhost/events-management/index.php/
+Frontend: http://localhost/events-management/index.php/home
+
 
 Login:
 Username: admin@email.com
 Password: password12
 User role: Admin
 
+-  There is only one Admin user and all newly created users will be added as Author role
+- Admin user credentials are mentioned above.
 
 Admin functionalities
  - admin register
  - login user
  
 -User module
-  - Admin role user  - has all capbilities to add, update, delete and view other users and Events
-  - Author role user - Have access to own created events - Can perform CRUD operations on its own Events
-					 - Has view and update capabilities for user module
-					 -  Cannot delete its own account
-					 - Cannot add new users.
--  New users can be added by admin or whiile registering
--  There is only one Admin user and all newly created users will be added as Author role
-- Admin user credentials are mentioned above.
+  - Admin role user  
+          - has all capabilities to add, update, delete and view other users and Events
+  - Author role user 
+          - Have access to own created events 
+          - Can perform CRUD operations on its own Events
+          - Has view and update capabilities for user module
+          - Cannot delete its own account
+          - Cannot add new users.
+
+-  New users can be added by admin or while registering
+
 
 -Events module
  - Display list of all events. has pagination and search functionality.
