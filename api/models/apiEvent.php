@@ -51,4 +51,24 @@ class apiEvent
         return $rdata[0]['created_by'];
        
     }
+
+    public function upcoming_events($params=array())
+    {
+         $params["sql"] = " SELECT * FROM tbl_events where event_date > NOW() order by event_date asc  LIMIT ".$params['offset']." , ".$params['limit']." ";
+            //$params["bind_params"][":limit"] = $params['limit'];
+         //$params["bind_params"][":offset"] = $params['offset'];
+        //print_r($params);exit;
+       
+        $result = $this->db->run_sql($params);
+
+        $t_param["sql"] = "SELECT COUNT(*) as total  FROM tbl_events where event_date > NOW() ";
+        $total_arr = $this->db->run_sql($t_param);
+        
+       /*  print_r($result);
+        echo "===";
+        print_r($total_arr);exit; */
+        $rdata = ["events "=>$result ,"total_events" =>$total_arr[0]["total"]];
+
+        return $rdata ;
+    }
 }

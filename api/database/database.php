@@ -294,7 +294,7 @@ class database
             foreach($params['bind_params'] as $key => $val)
             {
                 $stmt->bindValue($key, $val);
-                
+             
             }
         }
 

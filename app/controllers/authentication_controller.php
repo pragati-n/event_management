@@ -17,6 +17,12 @@ class authentication_controller
         $this->draw_login();
        
     }
+    public function register($params=array())
+	{
+        include ROOT.'/app/views/admin/register.php';        
+        exit;       
+    }
+    
     public function login_user($params=array())
 	{
         $response = helper::make_curl_request(['path'=>'login']);

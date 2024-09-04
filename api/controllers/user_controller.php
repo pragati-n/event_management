@@ -64,7 +64,7 @@ class user_controller
 
     public function update_user($params=array())
     {
-        $pattern = "/^(?=.*\d)[A-Za-z\d]{8,}$/";
+        $pattern = "/^(?=.*\d)[A-Za-z\d@._]{8,}$/";
        
         $rdata['success'] = false;
         $rdata['status_code'] = 403;

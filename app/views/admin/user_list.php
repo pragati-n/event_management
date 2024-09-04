@@ -30,7 +30,7 @@
         <!-- Add user Form (Initially Hidden) -->
         <div id="add-user-form" class="d-none">
             <?php 
-            print_r($_SESSION['is_admin']);
+          
                 $btn_title = ($_SESSION['is_admin'] == 'Admin') ? "Add user" : "Edit user";
             ?>
             <div class="user_title"> <h3><?= $btn_title ?></h3> </div>
@@ -58,6 +58,36 @@
             </form>
         </div>
 
+
+        <div id="add-new-user" class="d-none">
+            
+            <div class="user_title"> <h3>Add user</h3> </div>
+            <form id="form_save_new_user" name="form_save_new_user" >
+                <div class="form-group">
+                    <label for="user_new_name">Name</label>
+                    <input type="text" class="form-control" name="user_new_name" id="user_new_name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="user_new_email">Email</label>
+                    <input type="text" class="form-control" name="user_new_email" id="user_new_email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="user_new_password">Password</label>
+                    <input type="password" class="form-control" id="user_new_password" name="user_new_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_new_c_password">Confirm password</label>
+                    <input type="password" class="form-control" id="user_new_c_password" name="user_new_c_password" required>
+                </div>
+               
+               
+
+               <!-- <div class="error_msg hide_div" style="color: red;padding: 10px 0px;"></div> -->
+                <div class="alert alert-primary error_msg " role="alert" id="" ></div>
+                <button type="submit" id="save_new_user" class="btn btn-success">Save user</button>
+                <button type="button" class="btn btn-secondary" id="cancel-btn1">Cancel</button>
+            </form>
+        </div>
 
         <!--- Delete modal popup -->
         <div class="modal fade" id="deleteModalUser" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

@@ -15,9 +15,10 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                
+               
                 
             </table>
+            <div class="alert alert-primary error_msg " role="alert" id="" ></div>
         </div>
 
         <!-- Add Event Form (Initially Hidden) -->
@@ -41,6 +42,12 @@
                     <label for="img_uploader">Upload image</label>
                     <input type="file" name="img_uploader" id="img_uploader" accept="image/*">
                 </div>
+                <!--<div class="form-group">
+                    <label>Current Image</label>
+                    <div id="image_preview">
+                        <img id="preview_img" src="" alt="Event Image" style="max-width: 100px; max-height: 100px; display: none;">
+                    </div>
+                </div>-->
 
                <!-- <div class="error_msg hide_div" style="color: red;padding: 10px 0px;"></div> -->
                 <div class="alert alert-primary error_msg " role="alert" id="" ></div>

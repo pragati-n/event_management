@@ -17,6 +17,7 @@ class server
                             '/event_list' =>['GET'=>'event_controller@list'],	
                            
                             '/user_list' =>['GET'=>'user_controller@user_list'],	
+                            '/home' =>['GET'=>'homepage_controller@homepage'],	
                             
 
 
@@ -33,6 +34,7 @@ class server
 							'/api/user' => ['GET'=>'user_controller@get_user'],
 							'/api/user/update' => ['PUT'=>'user_controller@update_user'],
 							'/api/user/delete' => ['DELETE'=>'user_controller@delete_user'],
+							'/api/upcoming_events' => ['GET'=>'apiEvent_controller@upcoming_events'],
 									
 
                            
@@ -59,7 +61,7 @@ class server
 				include API_ROOT.'helpers/auth.php'; 
 				include API_ROOT.'/middleware/jwt_auth.php';
 				$j_data = array();
-				if(!in_array($path, ['/api/login', '/api/register'])) 
+				if(!in_array($path, ['/api/login', '/api/register','/api/upcoming_events'])) 
 				{
 					$jwt_auth = new	jwt_auth();
 					$j_data = $jwt_auth->jwt_authenticate();		
@@ -113,7 +115,11 @@ class server
 			if($path_info)
 			{
 //$_SESSION['user_id'] =0; 
-				if($this->app_type =="app" && !$_SESSION['user_id'] && !in_array($path, ['/login', '/register','/login_user']) )
+				if($path == '/home')
+				{
+					//Allow display of upcoming events on frontend
+				}
+				elseif($this->app_type =="app" && !$_SESSION['user_id'] && !in_array($path, ['/login', '/register','/login_user']) )
        			{
 					header("location: http://".$_SERVER['SERVER_NAME']."/events-management/index.php/login");
 					exit;

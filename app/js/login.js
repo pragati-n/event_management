@@ -31,5 +31,45 @@ jQuery(document).ready(function(){
             
         });
     });
+
+
+    jQuery(document).on("click","#register_btn",function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: '/events-management/index.php/api/register',
+            type: 'POST',
+            data: {
+                name: jQuery("#name").val(),
+                email: jQuery("#email").val(),
+                password: jQuery("#password").val(),
+                c_password: jQuery("#confirm_password").val(),
+            },
+            success: function(response) {
+              
+                if (response.success) {
+                   
+
+
+                    jQuery(".error_msg").show().html(response.message);
+                    setTimeout(() => {
+                        window.location.href = "/events-management/index.php/login";
+                    
+                    
+                    }, "1000");
+                    
+
+                } else {
+                   
+                    jQuery(".error_msg").show().html(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+               
+                jQuery(".error_msg").show().html(xhr['responseJSON']['message']);
+            },
+            
+        });
+    });
     
 });

@@ -22,7 +22,7 @@ class register_controller
     {
         $response['success'] = false;
         $response['status_code'] = 400;
-        $pattern = "/^(?=.*\d)[A-Za-z\d]{8,}$/";
+        $pattern = "/^(?=.*\d)[A-Za-z\d@._]{8,}$/";
 
         if( !filter_var($params['email'], FILTER_VALIDATE_EMAIL))
 		{

@@ -49,17 +49,18 @@ jQuery(document).ready(function(){
     })
 
     jQuery('#add-user-btn').on("click",function(){
-        alert(1)
-        jQuery('#add-user-form').removeClass('d-none');
+        jQuery('#add-new-user').removeClass('d-none');
         jQuery('#user-section').addClass('d-none');
-        jQuery("#form_save_user")[0].reset();
-        jQuery("#form_save_user").find(".error_msg").hide();
-        jQuery('#save_user').text("Save user") ; 
-        jQuery('#save_user').removeAttr('user_id');
+        jQuery('#add-user-form').addClass('d-none');
+        jQuery("#form_save_new_user")[0].reset();
+        jQuery("#form_save_new_user").find(".error_msg").hide();
+        jQuery('#save_new_user').text("Save user") ; 
+        jQuery('#save_new_user').removeAttr('user_id');
     })
 
-    jQuery('#cancel-btn').on("click",function(){
+    jQuery('#cancel-btn , #cancel-btn1').on("click",function(){
         jQuery('#user-section').removeClass('d-none');
+        jQuery('#add-new-user').addClass('d-none');
         jQuery('#add-user-form').addClass('d-none');
     });
 
@@ -224,6 +225,8 @@ function load_events()
            r1 = response;
             if(response)
             {
+                jQuery(".error_msg").hide();
+                $('#events_table').show();
                 response["data"].forEach(rdata=>{
                     console.log(rdata.event_date)
                 })
@@ -277,8 +280,9 @@ function load_events()
             }
             
         },
-        error:function(data){
-            //jQuery("#error_div").removeClass("alert-success").addClass("alert-danger").html(data.message);
+        error:function(xhr, status, error){
+            $('#events_table').hide()
+            jQuery(".error_msg").show().removeClass("alert-success").addClass("alert-danger").html(xhr['responseJSON']['message']);
         }
 
 
@@ -407,7 +411,7 @@ jQuery(document).on("click","#confirmDeleteBtn",function(){
         success: function(response) 
         {
             $('#deleteModal').modal('hide');
-            load_events()
+            load_events();
         },
         error: function(xhr, status, error) {
             $("#deleteModal").find(".error_msg").show()
@@ -507,6 +511,47 @@ jQuery(document).on("click","#save_user",function(e){
    
 });
 
+
+jQuery(document).on("click","#save_new_user",function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: '/events-management/index.php/api/register',
+        type: 'POST',
+        data: {
+            name: jQuery("#user_new_name").val(),
+            email: jQuery("#user_new_email").val(),
+            password: jQuery("#user_new_password").val(),
+            c_password: jQuery("#user_new_c_password").val(),
+        },
+        success: function(response) {
+          
+            if (response.success) {
+               
+
+
+                jQuery(".error_msg").removeClass("alert-danger").addClass("alert-primary").show().html(response['message']);
+                setTimeout(() => {
+                             jQuery('#cancel-btn').trigger("click");
+                             load_users();
+                   }, "1000");
+                 
+                
+
+            } else {
+               
+                jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+            }
+        },
+        error: function(xhr, status, error) {
+           
+            jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+        },
+        
+    });
+});
+
+
 jQuery(document).on("click",".user_delete_btn",function(){
     var user_id = $(this).attr('data-id');
 
@@ -549,6 +594,7 @@ jQuery(document).on("click",".user_edit_btn",function(){
    
     jQuery('#add-user-form').removeClass('d-none');
     jQuery('#user-section').addClass('d-none');
+    jQuery('#add-new-user').addClass('d-none');
     jQuery("#form_save_user")[0].reset();
     jQuery("#form_save_user").find(".error_msg").hide();
 
@@ -612,3 +658,6 @@ function getCurrentDateTime() {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+
+

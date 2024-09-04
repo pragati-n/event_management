@@ -52,6 +52,17 @@
         .hide_div{
             display:none;
         }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .login-link a {
+            color: #4CAF8C;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
     </style>
     <script src="<?=WEB_PATH?>/app/js/jquery-3.7.1.min.js"></script>
     <script src="<?=WEB_PATH?>/app/js/login.js"></script>
@@ -70,6 +81,9 @@
 
             <div class="error_msg hide_div" style="color: red;padding: 10px 0px;"></div>
         </form>
+        <div class="login-link">
+            Do not have account? <a href="register">Register here</a>
+        </div>
     </div>
 </body>
 </html>
