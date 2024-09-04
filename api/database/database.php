@@ -58,8 +58,7 @@ class database
             $where = $params["where"];
             $count = 0;
         }
-/* echo "where".$where; */
-//print_r($params);
+
        
         $order_column = isset($params["order_column"]) ? $params["order_column"] : "id";
         $order_by = isset($params["order_by"]) ? $params["order_by"] : "desc";
@@ -103,9 +102,7 @@ class database
             }            
         } 
 
-        //echo $query;
-        //echo "<br>";
-        //echo "==<br>"; 
+       
         try
         {
             if($stmt->execute())
@@ -208,18 +205,14 @@ class database
         foreach($params["columns"] as $key => $val)
         {
             $stmt->bindValue(':'.$key,$val);
-            /* echo "<br> bind cols";
-            echo ':'.$key."==".$val;
-            echo "<br>"; */
+            
         }
         foreach($params['where'] as $key => $val)
         {
             $stmt->bindValue(':c_'.$key,$val);
-            /* echo "<br> bindwhere ";
-            echo ':c_'.$key."==".$val;
-            echo "<br>"; */
+            
         }
-     //echo $query ;
+    
         try{
             if($stmt->execute())
             {
@@ -258,8 +251,7 @@ class database
         foreach($params['where'] as $key => $val)
         {
             $stmt->bindValue(':'.$key,$val);
-            //echo "<br> where === ";
-            //echo ':'.$key."===".$val."<br>";
+            
         }
 
         try{

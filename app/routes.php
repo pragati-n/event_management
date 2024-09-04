@@ -1,7 +1,6 @@
 <?php
-
 session_start();
-error_reporting(1);
+//error_reporting(1);
 class server
 {
 	
@@ -45,10 +44,7 @@ class server
 	public function __construct()
 	{
 		$this->db = new database();
-		$this->db->connect();
-		
-		
-		
+		$this->db->connect();		
 	}
 	
 	public function handle($path = '')
@@ -106,17 +102,15 @@ class server
 				// Fallback to $_POST for form submissions
 				$params = $_POST;
 			}
-//echo $path."====".$req_method;
-//print_r($params);exit;
+
 			$params['is_admin'] =  $j_data['is_admin'] ?? '';
 			$params['user_id'] =  $j_data['user_id'] ?? '';
-			
 			$path_info = $this->path_arr[$path][$req_method];
-//echo "info===".$path_info;
+
 
 			if($path_info)
 			{
-//$_SESSION['user_id'] =0; 
+
 				if($path == '/home')
 				{
 					//Allow display of upcoming events on frontend
@@ -133,12 +127,10 @@ class server
 				}
 				$path_info_arr = explode("@",$path_info);
 				
-		//	print_r($path_info_arr);
+		
 	
 				include_once ROOT.$this->app_type.'/controllers/'.$path_info_arr[0].'.php';
-				//echo "in2 ";
 				
-				//exit;
 				$c_obj = new $path_info_arr[0]($this->db);
 				$response = $c_obj->{$path_info_arr[1]}($params);
 				

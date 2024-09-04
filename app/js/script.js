@@ -226,14 +226,12 @@ function load_events()
 
         success:function(response)
         {
-           console.log(response['data']); 
-           r1 = response;
             if(response)
             {
                 jQuery(".error_msg").hide();
                 $('#events_table').show();
                 response["data"].forEach(rdata=>{
-                    console.log(rdata.event_date)
+                   
                 })
                 if ($.fn.DataTable.isDataTable('#events_table')) {
                     $('#events_table').DataTable().clear().destroy();
@@ -245,7 +243,7 @@ function load_events()
                         { 
                             data: 'even_description' ,
                             render:function(data){
-                                console.log(`data = ${data}`)
+                               
                                 if(data.length > 50)
                                 {
                                  return data.substring(0,50)+"...";
@@ -315,7 +313,6 @@ function load_users()
         contentType: 'application/json',
         success:function(response)
         {
-           console.log(response['data']); 
             if(response)
             {
                
@@ -377,13 +374,11 @@ function formatEventDate(dateString) {
 
 
 $('#deleteEventModal').on('show.bs.modal', function (event) {
-    console.log("eventtt");
-    console.log(event)
+   
     var button = $(event.relatedTarget);
     var eventId = button.data('id');
     $(this).data('id', eventId);
-    console.log('tihiss')
-    console.log($(this))
+    
 });
 
 
@@ -397,14 +392,12 @@ jQuery(document).on("click",".event_delete_btn",function(){
 });
 
 jQuery(document).on("click","#confirmDeleteBtn",function(){
-  console.log("=====deleteeee")
-  console.log($(this).parents("#deleteModal").find(".error_msg"))
-    
+ 
     const token =  get_token();// Retrieve the token
     var eventId = $('#confirmDeleteBtn').attr('event-id');
     var actionUrl = '/events-management/index.php/api/events/delete';
 
-    console.log("=====eventId"+eventId)
+  
     $.ajax({
         url: actionUrl,
         contentType: 'application/json',
@@ -568,8 +561,7 @@ jQuery(document).on("click",".user_delete_btn",function(){
 });
 
 jQuery(document).on("click","#confirmDeleteUSerBtn",function(){
-    console.log("=====deleteeeeuser")
-    console.log($(this).parents("#deleteModal").find(".error_msg"))
+    
       
       const token =  get_token();// Retrieve the token
       var user_id = $(this).attr('user_id');
@@ -681,12 +673,11 @@ function fetch_statistics()
         contentType: 'application/json',
         success:function(response)
         {
-            console.log('response.datadf')
-            console.log(response.data['total_events'])
+          
             upcoming_str = `Upcoming Events: No future are present `;
             if(response.data['total_events'])
             {
-                console.log(response.data['total_events'])
+                
                 upcoming_str = `Upcoming Events: ${response.data['total_events']} `;
             }
             jQuery('#up_events').html(upcoming_str) ; 
@@ -714,7 +705,7 @@ function fetch_statistics()
             total_users = `Total active users: - `;
             if(response.data)
             {
-                console.log(response.data)
+               
                 total_users = `Total active users:  ${response.data} `;
             }
             jQuery('#total_users').html(total_users) ; 
