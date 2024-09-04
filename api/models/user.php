@@ -46,4 +46,14 @@ class user
         return $d_result;
        
     }
+
+    public function total_active_users()
+    {
+        
+        $t_param["sql"] = "SELECT COUNT(*) as total_users  FROM tbl_user where status = 1 ";
+        $total_arr = $this->db->run_sql($t_param); 
+        return $total_arr[0]['total_users'];
+
+        
+    }
 }

@@ -168,4 +168,29 @@ class user_controller
         $rdata = $this->model->get_user($g_data);       
         return $rdata['data'][0]["id"];
     }
+
+
+    
+    public function total_active_users($params=array())
+    {  
+        $result = $this->model->total_active_users();
+        if($result > 0)
+        {
+            $rdata['success'] = true;
+            $rdata['data'] = $result;
+            $rdata['status_code'] = 200;
+            $rdata['message'] = "Total active user fetched";             
+            
+        }
+        else
+        {
+            $rdata['success'] = false;
+            $rdata['status_code'] = 500;
+            $rdata['message'] = " Please try again later";
+        }
+        
+        return $rdata;
+       
+        
+    }
 }

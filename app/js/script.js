@@ -192,6 +192,11 @@ function check_url()
     {
              load_users();
     }
+    else if(path === '/events-management/index.php/' || path === '/events-management/index.php') 
+    {
+       fetch_statistics();
+    }
+    
 }
 
 
@@ -661,3 +666,61 @@ function getCurrentDateTime() {
 
 
 
+function fetch_statistics()
+{
+    
+    const token =  get_token();// Retrieve the token
+    var actionUrl = '/events-management/index.php/api/upcoming_events';
+    $.ajax({
+        type:"GET",
+        url:actionUrl,
+        headers:{
+            "Authorization":`Bearer ${token}`
+        },
+        //data:formData,
+        contentType: 'application/json',
+        success:function(response)
+        {
+            console.log('response.datadf')
+            console.log(response.data['total_events'])
+            upcoming_str = `Upcoming Events: No future are present `;
+            if(response.data['total_events'])
+            {
+                console.log(response.data['total_events'])
+                upcoming_str = `Upcoming Events: ${response.data['total_events']} `;
+            }
+            jQuery('#up_events').html(upcoming_str) ; 
+        },
+        error:function(xhr, status, error){
+           // jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+        }
+    });
+
+    
+
+
+    var actionUrl = '/events-management/index.php/api/user/total_active_users';
+    $.ajax({
+        type:"GET",
+        url:actionUrl,
+        headers:{
+            "Authorization":`Bearer ${token}`
+        },
+        //data:formData,
+        contentType: 'application/json',
+        success:function(response)
+        {
+           
+            total_users = `Total active users: - `;
+            if(response.data)
+            {
+                console.log(response.data)
+                total_users = `Total active users:  ${response.data} `;
+            }
+            jQuery('#total_users').html(total_users) ; 
+        },
+        error:function(xhr, status, error){
+           // jQuery(".error_msg").removeClass("alert-primary").addClass("alert-danger").show().html(xhr['responseJSON']['message']);
+        }
+    });
+}

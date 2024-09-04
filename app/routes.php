@@ -34,7 +34,9 @@ class server
 							'/api/user' => ['GET'=>'user_controller@get_user'],
 							'/api/user/update' => ['PUT'=>'user_controller@update_user'],
 							'/api/user/delete' => ['DELETE'=>'user_controller@delete_user'],
+							'/api/user/total_active_users' => ['GET'=>'user_controller@total_active_users'],
 							'/api/upcoming_events' => ['GET'=>'apiEvent_controller@upcoming_events'],
+							
 									
 
                            
