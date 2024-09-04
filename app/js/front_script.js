@@ -31,7 +31,7 @@ function loadEvents(page) {
                                 <div class="event-details">
                                     <h3>${event.event_name}</h3>
                                     <p class="event-date">Date: ${ev_date}</p>
-                                    <p class="event-description">${event.even_description}</p>
+                                    <p class="event-description">${(event.even_description).substring(0,200)}...</p>
                                 </div>
                             </div>
                         `;
