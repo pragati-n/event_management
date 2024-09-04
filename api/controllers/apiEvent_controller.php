@@ -302,4 +302,37 @@ class apiEvent_controller
 
         }
     }
+
+    public function upcoming_events($params=array())
+    {
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;    
+
+        $g_data['limit'] =  $limit;
+        $g_data['offset'] = $offset;
+
+        $data = $this->model->upcoming_events($g_data);
+       
+        if($data['total_events'])
+        {
+           
+            $rdata['success'] = true;
+           
+            $rdata['status_code'] = 200;
+            $rdata["message"] = "Event fetched";            
+            $rdata['data'] = $data;
+            $rdata['data']['page'] = $page;
+          
+        }
+        else
+        {
+           
+            $rdata['success'] = false;
+            $rdata['status_code'] = 400;
+            $rdata["message"] = "No events found for your request";
+        }
+   
+        return $rdata;
+    }
 }
