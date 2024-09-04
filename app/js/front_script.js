@@ -2,6 +2,7 @@ let currentPage = 1;
 const limit = 5;
 
 function loadEvents(page) {
+   
     $.ajax({
         url: '/events-management/index.php/api/upcoming_events',
         type: 'GET',
@@ -42,7 +43,7 @@ function loadEvents(page) {
                     const prevBtn = $('#prev-btn');
                     const nextBtn = $('#next-btn');
 
-                    const totalEvents = response.total_events;
+                    const totalEvents = response.data.total_events;//response.total_events;
                     
                     const totalPages = Math.ceil(totalEvents / limit);
                    
