@@ -26,7 +26,7 @@ function loadEvents(page) {
                         const eventCard = `
                             <div class="event-card">
                                 <div class="event-image">
-                                <img src="http://localhost/events-management/${event.image_path}" alt="${event.event_name}">
+                                <img src="http://${window.location.hostname}/events-management/${event.image_path}" alt="${event.event_name}">
                                 </div>
                                 <div class="event-details">
                                     <h3>${event.event_name}</h3>
